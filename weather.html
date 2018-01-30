@@ -6,15 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Weather In My City</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" />
+    <script src="modernizr-custom.js"></script>
     <style>
-        #body {
-            background-size: cover;
-            background-color: #56829E;
-            background-repeat: no-repeat;
-
-
+        html, body {
+            height: 100%;
+            
         }
+
+        body {
+            background-size: auto 100%;
+            background-repeat: no-repeat;
+            background-position: left top;
+            background-color: #56829E;
+        }
+
 
         #getMessage {
             position: absolute;
@@ -39,8 +45,7 @@
             padding: 20px;
             text-align: center;
             text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
+            font-size: 26px;
             margin: 4px 2px;
             border-radius: 8px;
             display: none;
@@ -59,14 +64,23 @@
         #container {
             background-color: #56829E;
             padding: 25px;
-            font-size: 50px;
+            font-size: 40px;
             color: white;
             border-radius: 8px;
             display: none;
-            width: 15%;
+            width: 20%;
             text-align: center;
             position: absolute;
             opacity: 0.9;
+        }
+
+        @media only screen and (max-width: 750px) {
+            #container {
+                font-size: 25px;
+                width: 33%;
+            }
+
+
         }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -134,31 +148,51 @@
                             $("#farenheit").show();
                         })
 
-                        if (temp > 35) { //paisajes estan ok!!
+                        if (Modernizr.mq('(max-width: 550px)') && temp > 30) { //paisajes estan ok!!
+                            $("#body").css("background-image", "url(src/hotMin.jpeg)")
+                        } else if (Modernizr.mq('(max-width: 750px)') && temp > 30) { //paisajes estan ok!!
+                            $("#body").css("background-image", "url(src/hotMid.jpeg)")
+                        } else if (temp > 30) { //paisajes estan ok!!
                             $("#body").css("background-image", "url(src/hot.jpeg)")
-                        } else if (temp > 20) {
-                            $("#body").css("background-image", "url(src/beach.jpeg)");
-                        } else if (temp > 10) {
-                            $("#body").html("background-image", "url(src/medium.jpeg")
-                        } else {
-                            $("body").html("background-image", "url(src/cold.jpeg")
+                        }
+                        
+                         else if (Modernizr.mq('(max-width: 550px)') && temp > 20) {
+                            $("#body").css("background-image", "url(src/beachMin.jpeg)")
+                        } else if (Modernizr.mq('(max-width: 750px)') && temp > 20) {
+                            $("#body").css("background-image", "url(src/beachMid.jpeg)")
+                        } else if (temp > 20) { 
+                            $("#body").css("background-image", "url(src/beach.jpeg)")
                         }
 
+                        else if (Modernizr.mq('(max-width: 550px)') && temp > 10) {
+                            $("#body").css("background-image", "url(src/mediumMin.jpeg)")
+                        } else if (Modernizr.mq('(max-width: 750px)') && temp > 10) {
+                            $("#body").css("background-image", "url(src/mediumMid.jpeg)")
+                        } else if (temp > 10) { 
+                            $("#body").css("background-image", "url(src/medium.jpeg)")
+                        }  
+                        
+                         else if (Modernizr.mq('(max-width: 550px)') && temp < 10) { 
+                            $("#body").css("background-image", "url(src/coldMin.jpeg)")
+                        } else if (Modernizr.mq('(max-width: 750px)') && temp < 10) { 
+                            $("#body").css("background-image", "url(src/coldMid.jpeg)")
+                        } else { 
+                            $("#body").css("background-image", "url(src/cold.jpeg)")
+                        }
                     });
             });
         });
-
     </script>
 </head>
 
-<body id="body">
+<body id="body" class="img-responsive">
     <div id="container">
 
         <div id="message"></div>
         <div class="city"></div>
     </div>
     <img id="getMessage" src="src/pin.png"></img>
-
+    
 
     <button id="farenheit" class="button">° F</button>
     <button id="celsius" class="button">° C</button>
