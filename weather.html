@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Weather In My City</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <style>
+        #body {
+            background-size: cover;
+            background-color: #56829E;
+            background-repeat: no-repeat;
+
+
+        }
+
+        #getMessage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            width: 25%;
+        }
+
+
+        #getMessage:active {
+            background-color: #56829E;
+            opacity: 0.7;
+        }
+
+        .button {
+            background-color: #56829E;
+            border: none;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            border-radius: 8px;
+            display: none;
+            float: right;
+
+
+        }
+
+        .button:active {
+
+            background-color: #56829E;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px)
+        }
+
+        #container {
+            background-color: #56829E;
+            padding: 25px;
+            font-size: 50px;
+            color: white;
+            border-radius: 8px;
+            display: none;
+            width: 15%;
+            text-align: center;
+            position: absolute;
+            opacity: 0.9;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        //get geolocation data
+
+        var lat;
+        var long;
+        var id = 0;
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                $("#data").html("latitude: " + position.coords.latitude
+                    + "<br> logitude: " + position.coords.longitude);
+                lat = position.coords.latitude;
+                long = position.coords.longitude;
+
+            });
+        }
+
+        // get of json 
+        var jason;
+        var jasonn;
+        var temp;
+        var city;
+
+        $(document).ready(function () {
+
+
+
+            $("#getMessage").on("click", function () {
+
+                $.getJSON("https://fcc-weather-api.glitch.me/api/current?lat=" + lat + "&lon=" + long,
+                    function (json) {
+                        jason = JSON.stringify(json);
+                        jasonn = JSON.parse(jason);
+                        temp = jasonn.main.temp;
+                        temp = temp.toFixed(1);
+                        city = jasonn.name;
+                        id = jasonn.weather[0].id;
+
+                        $("#getMessage").hide();
+                        $("#farenheit").show();
+                        $("#container").show();
+
+
+                        $("#message").html(temp + " °C");
+                        $(".city").html(city);
+                        $("#temp").html(temp);
+
+
+                        $("#farenheit").on("click", function () {
+                            temp = temp * 9 / 5 + 32;
+                            temp = Math.round(temp);
+                            $("#message").html(temp + " °F");
+                            $("#farenheit").hide();
+                            $("#celsius").show();
+                        })
+
+                        $("#celsius").on("click", function () {
+                            temp = (temp - 32) / 1.8;
+                            temp = Math.round(temp);
+                            $("#celsius").hide();
+                            $("#message").html(temp + " °C");
+                            $("#farenheit").show();
+                        })
+
+                        if (temp > 35) { //paisajes estan ok!!
+                            $("#body").css("background-image", "url(src/hot.jpeg)")
+                        } else if (temp > 20) {
+                            $("#body").css("background-image", "url(src/beach.jpeg)");
+                        } else if (temp > 10) {
+                            $("#body").html("background-image", "url(src/medium.jpeg")
+                        } else {
+                            $("body").html("background-image", "url(src/cold.jpeg")
+                        }
+
+                    });
+            });
+        });
+
+    </script>
+</head>
+
+<body id="body">
+    <div id="container">
+
+        <div id="message"></div>
+        <div class="city"></div>
+    </div>
+    <img id="getMessage" src="src/pin.png"></img>
+
+
+    <button id="farenheit" class="button">° F</button>
+    <button id="celsius" class="button">° C</button>
+
+    <div id="id"></div>
+
+    <div class="text"></div>
+
+    <script>
+
+
+    </script>
+
+</body>
+
+</html>
